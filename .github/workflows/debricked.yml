@@ -1,0 +1,20 @@
+name: Debricked scan
+
+on: [push, pull_request]
+
+jobs:
+  vulnerabilities-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+    - name: Install Conan SBOM generator # https://github.com/CycloneDX/cyclonedx-conan
+      run: |
+          python -m pip install cyclonedx-conan 
+          python -m pip install markupsafe==2.0.1
+          python -m pip install -U conan
+    - name: Generate Conan SBOM
+      run: cyclonedx-conan conanfile.txt > sbom.json # cyclonedx-conan PATH_TO_conanfile.txt > SBOM_NAME_FILE
+    - uses: debricked/actions@v4
+      env:
+        DEBRICKED_TOKEN: ${{ secrets.DEBRICKED_TOKEN }}
