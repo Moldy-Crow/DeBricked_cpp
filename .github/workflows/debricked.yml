@@ -13,6 +13,7 @@ jobs:
           python -m pip install 'cyclonedx-python-lib>=5.0.0,<6' 
           python -m pip install markupsafe==2.0.1
           python -m pip install -U conan
+          python -m pip install cyclonedx-conan # Add this line to install cyclonedx-conan
     - name: Generate Conan SBOM
       run: cyclonedx-conan conanfile.txt > sbom.json # cyclonedx-conan PATH_TO_conanfile.txt > SBOM_NAME_FILE
     - uses: debricked/actions@v4
